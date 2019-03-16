@@ -296,7 +296,7 @@ public class Model : MonoBehaviour
 
         RunSim(); //Resets values to start    
 
-        StartCoroutine(NextMinute()); //Runs Simulation over a day
+        StartCoroutine(SimulateDay()); //Runs Simulation over a day
         
         //if (currentTime == 48) //At midnight loop time
         //{
@@ -304,29 +304,29 @@ public class Model : MonoBehaviour
         //}
     }
 
-    IEnumerator NextMinute()
+    IEnumerator SimulateDay() //Simulates a whole day continously
     {
-        for (int i = 0; i <= 48; i++)
+        for (int i = 0; i <= 48; i++) //48 half hour chunks
         {
-            for (int j = 0; j < 30; j++)
+            for (int j = 0; j < 30; j++) //30 mins per half hour
             {
-                AdvanceTimeAlternative();
-                yield return new WaitForSecondsRealtime(0.01f);
+                AdvanceTimeAlternative(); //Simulates a minute
+                yield return new WaitForSecondsRealtime(0.01f); //Waits a little before simulating the next minute, so UI can display progress
 
             }
             currentTime++;
         }
 
-        startButton.interactable = true;
+        startButton.interactable = true; //Sets button to be usable when the simulation is over
     }
 
-    public void UpdateDisplay()
+    public void UpdateDisplay() //Updates UI elements
     {
         airTempText.text = airTemp.ToString("F1");
         wallTempText.text = wallTemp.ToString("F1");
         thermoStatus.text = heatingOn.ToString();
         timeText.text = currentTime.ToString();
-        if (currentTime >= 48)
+        if (currentTime >= 48) //Wraps time around 24 hour clock
         {
             timeText.text = (Mathf.FloorToInt((currentTime - 48) / 2)).ToString() + ":" + (Mathf.FloorToInt(currentTime % 2) * 30).ToString();
         }
@@ -337,8 +337,8 @@ public class Model : MonoBehaviour
         
 
         //Sets Colours
-        float airRed = Mathf.Floor(((airTemp - 14) / (targetTemp - 14)) * 250);
-        float airBlue = 255 - airRed;
+        float airRed = Mathf.Floor(((airTemp - 14) / (targetTemp - 14)) * 250); //Generates red value based on percentage of current temperature and target temperature
+        float airBlue = 255 - airRed; //Blue value is the inverse of red value
         Color airCol = new Color(airRed / 255f, 0, airBlue / 255f);
         airImage.color = airCol;
 
