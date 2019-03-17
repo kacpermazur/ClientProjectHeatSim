@@ -12,6 +12,7 @@ public class Model : MonoBehaviour
     float airWallDifference; //Difference in temperature between air and wall
     int[] heatingPeriod1; //Set of times the thermostat can be on
     int[] heatingPeriod2; //Second set of times the thermostat can be on
+    bool paused;
 
     //Variables
     int wallType;
@@ -34,12 +35,16 @@ public class Model : MonoBehaviour
     public Image wallImage;
 
     public Button startButton;
+    public Slider timeSlider;
+    public Toggle pauseToggle;
    
     // Start is called before the first frame update
     void Start()
     {
         UpdateSliderText();
         startButton.interactable = true;
+        paused = false;
+        pauseToggle.isOn = paused;
     }
 
     // Update is called once per frame
@@ -310,8 +315,9 @@ public class Model : MonoBehaviour
         {
             for (int j = 0; j < 30; j++) //30 mins per half hour
             {
+                
                 AdvanceTimeAlternative(); //Simulates a minute
-                yield return new WaitForSecondsRealtime(0.01f); //Waits a little before simulating the next minute, so UI can display progress
+                yield return new WaitForSecondsRealtime(0.01f * timeSlider.value); //Waits a little before simulating the next minute, so UI can display progress
 
             }
             currentTime++;
@@ -351,6 +357,11 @@ public class Model : MonoBehaviour
     public void UpdateSliderText()
     {
         tempSettingText.text = tempSlider.value.ToString();
+    }
+
+    public void Pause()
+    {
+        paused = pauseToggle.isOn;
     }
 
     
