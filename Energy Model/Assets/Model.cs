@@ -15,9 +15,9 @@ public class Model : MonoBehaviour
     bool paused;
 
     //Variables
-    int wallType;
-    int heatTime;
-    float targetTemp;
+    int wallType; //Selected type of wall
+    int heatTime; //Selected heating duration
+    float targetTemp; //Selected target temperature
 
     //UI Elements
     public Dropdown wallList;
@@ -44,7 +44,6 @@ public class Model : MonoBehaviour
         UpdateSliderText();
         startButton.interactable = true;
         paused = false;
-        pauseToggle.isOn = paused;
     }
 
     // Update is called once per frame
@@ -55,7 +54,7 @@ public class Model : MonoBehaviour
 
     
 
-    public void RunSim()
+    public void RunSim() //Sets up values for start of simulation
     {
         //Read variables
         wallType = wallList.value;
@@ -295,7 +294,7 @@ public class Model : MonoBehaviour
         UpdateDisplay();
     }
 
-    public void TestAltMethod()
+    public void TestAltMethod() //Sets up and runs simulation
     {
         startButton.interactable = false;
 
@@ -342,7 +341,7 @@ public class Model : MonoBehaviour
         }
         
 
-        //Sets Colours
+        //Sets colours of air/wall images
         float airRed = Mathf.Floor(((airTemp - 14) / (targetTemp - 14)) * 250); //Generates red value based on percentage of current temperature and target temperature
         float airBlue = 255 - airRed; //Blue value is the inverse of red value
         Color airCol = new Color(airRed / 255f, 0, airBlue / 255f);
@@ -354,7 +353,7 @@ public class Model : MonoBehaviour
         wallImage.color = wallCol;
     }
 
-    public void UpdateSliderText()
+    public void UpdateSliderText() //Updates text value above temperature slider
     {
         tempSettingText.text = tempSlider.value.ToString();
     }
