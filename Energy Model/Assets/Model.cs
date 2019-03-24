@@ -16,6 +16,9 @@ public class Model : MonoBehaviour
     bool paused;
     int timeWarm; //Number of minutes house is 'warm' for
 
+    bool boilerOn; //If the boiler is giving off heat after turning off
+    int boilerTimeLeft; //Time before the boiler stops giving off heat
+
     //User Variables
     int wallType;
     int heatTime;
@@ -295,6 +298,7 @@ public class Model : MonoBehaviour
         if (airTemp >= targetTemp)
         {
             heatingOn = false; //Overrides heating setting if current air temperature is above limit
+
         }
 
         if (airTemp >= 18 && wallTemp >= 17)
