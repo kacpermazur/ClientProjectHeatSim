@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Model : MonoBehaviour
 {
+    //Model Variables
     bool heatingOn; //If thermo is currently on
     int currentTime; //Current time, in half hours starting at midnight (0 is 0:00, 1 is 0:30, 6am is 12, 5pm is 34 etc)
     float wallTemp; //Wall Temperature
@@ -13,11 +14,12 @@ public class Model : MonoBehaviour
     int[] heatingPeriod1; //Set of times the thermostat can be on
     int[] heatingPeriod2; //Second set of times the thermostat can be on
     bool paused;
+    int timeWarm; //Number of minutes house is 'warm' for
 
-    //Variables
-    int wallType; //Selected type of wall
-    int heatTime; //Selected heating duration
-    float targetTemp; //Selected target temperature
+    //User Variables
+    int wallType;
+    int heatTime;
+    float targetTemp;
 
     //UI Elements
     public Dropdown wallList;
@@ -37,6 +39,8 @@ public class Model : MonoBehaviour
     public Button startButton;
     public Slider timeSlider;
     public Toggle pauseToggle;
+
+    public Text warmText;
    
     // Start is called before the first frame update
     void Start()
@@ -93,7 +97,8 @@ public class Model : MonoBehaviour
         wallTemp = 14;
         currentTime = 12; //Set time to 6:00am
         heatingOn = true;
-        
+        timeWarm = 0;
+
         //Get the time period the heating is on for
         heatingPeriod1 = new int[heatTime];
         heatingPeriod2 = new int[heatTime];
@@ -111,7 +116,7 @@ public class Model : MonoBehaviour
         UpdateDisplay();
     }
 
-    //Method to advance the current time by half an hour
+    //Method to advance the current time by half an hour (Old method not in use)
     public void AdvanceTime()
     {
         currentTime += 1; //Advance time by half an hour
@@ -291,6 +296,11 @@ public class Model : MonoBehaviour
         {
             heatingOn = false; //Overrides heating setting if current air temperature is above limit
         }
+
+        if (airTemp >= 18 && wallTemp >= 17)
+        {
+            timeWarm++;
+        }
         UpdateDisplay();
     }
 
@@ -351,6 +361,8 @@ public class Model : MonoBehaviour
         float wallBlue = 255 - wallRed;
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
+
+        warmText.text = Mathf.Floor(timeWarm / 60).ToString() + " Hours " + Mathf.Floor(timeWarm % 60).ToString() + " Mins";
     }
 
     public void UpdateSliderText() //Updates text value above temperature slider
