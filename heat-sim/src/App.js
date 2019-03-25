@@ -1,9 +1,14 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+import Slider from "./componets/Slider";
 
 class App extends Component {
   render() {
-    return <div>Temp</div>;
+    return (
+      <React.Fragment>
+        <div>Temp</div>
+        <Slider />
+      </React.Fragment>
+    );
   }
 }
 
