@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
+import "../RenderView/RenderView.css";
 
 const RenderView = props => {
   return (
-    <React.Fragment>
-      <div>RenderView Here</div>
-    </React.Fragment>
+    <div className="render-frame">
+      RenderView Here
+      <div>wall here</div>
+    </div>
   );
 };
 
