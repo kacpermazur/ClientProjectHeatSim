@@ -44,6 +44,7 @@ public class Model : MonoBehaviour
     public Toggle pauseToggle;
 
     public Text warmText;
+    public Text boilerText;
    
     // Start is called before the first frame update
     void Start()
@@ -203,7 +204,7 @@ public class Model : MonoBehaviour
         //Turns heating on/off at end of time step
         for (int i = 0; i < heatTime; i++)
         {
-            if (heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime)
+            if ((heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime) && airTemp < targetTemp - 1)
             {
                 heatingOn = true; //Turns heating on if within set heating periods
             }
@@ -220,7 +221,7 @@ public class Model : MonoBehaviour
     {
                
 
-        if (heatingOn) //If the heating is currently on
+        if (heatingOn || boilerTimeLeft > 0) //If the heating is currently on, or the boiler is still giving off heat
         {
 
 
@@ -285,19 +286,35 @@ public class Model : MonoBehaviour
             }
         }
 
-
+        boilerTimeLeft--; //Reduce the time left for the boiler. Reducing this below 0 is fine as it will be reset when it needs to be turned back on
 
         //Turns heating on/off at end of time step
         for (int i = 0; i < heatTime; i++)
         {
-            if (heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime)
+            if ((heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime) && airTemp < targetTemp - 1)
             {
                 heatingOn = true; //Turns heating on if within set heating periods
+
+                if (airTemp >= targetTemp && boilerOn == false) //If within heating period and boiler would turn off, turn boiler on
+                {
+                    boilerOn = true;
+                    boilerTimeLeft = 30; //boiler on for half an hour
+                }
+                else //If temp is lower than required amount
+                {
+                    boilerOn = false; //Allows the boiler to be turned on again - used so boiler is not always on while within heating time
+                }
             }
         }
         if (airTemp >= targetTemp)
         {
             heatingOn = false; //Overrides heating setting if current air temperature is above limit
+
+            if (boilerOn == false)
+            {
+                boilerOn = true;
+                boilerTimeLeft = 30; //boiler on for half an hour
+            }
 
         }
 
@@ -367,6 +384,15 @@ public class Model : MonoBehaviour
         wallImage.color = wallCol;
 
         warmText.text = Mathf.Floor(timeWarm / 60).ToString() + " Hours " + Mathf.Floor(timeWarm % 60).ToString() + " Mins";
+
+        if (boilerTimeLeft > 0)
+        {
+            boilerText.text = "True";
+        }
+        else
+        {
+            boilerText.text = "False";
+        }
     }
 
     public void UpdateSliderText() //Updates text value above temperature slider
