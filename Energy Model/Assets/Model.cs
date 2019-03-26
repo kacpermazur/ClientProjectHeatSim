@@ -15,6 +15,7 @@ public class Model : MonoBehaviour
     int[] heatingPeriod2; //Second set of times the thermostat can be on
     bool paused;
     int timeWarm; //Number of minutes house is 'warm' for
+    int timeHeatingOn; //Total time the heating is on for
 
     bool boilerOn; //If the boiler is giving off heat after turning off
     int boilerTimeLeft; //Time before the boiler stops giving off heat
@@ -44,7 +45,7 @@ public class Model : MonoBehaviour
     public Toggle pauseToggle;
 
     public Text warmText;
-    public Text boilerText;
+    public Text boilerText;    
    
     // Start is called before the first frame update
     void Start()
@@ -102,6 +103,7 @@ public class Model : MonoBehaviour
         currentTime = 12; //Set time to 6:00am
         heatingOn = true;
         timeWarm = 0;
+        timeHeatingOn = 0;
 
         //Get the time period the heating is on for
         heatingPeriod1 = new int[heatTime];
@@ -251,7 +253,9 @@ public class Model : MonoBehaviour
             }
 
             //Air heats up
-            airTemp += 4.0f / 30.0f;            
+            airTemp += 4.0f / 30.0f;
+
+            timeHeatingOn++;
 
         }
         else //If the heating is off
@@ -382,6 +386,8 @@ public class Model : MonoBehaviour
         float wallBlue = 255 - wallRed;
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
+
+        
 
         warmText.text = Mathf.Floor(timeWarm / 60).ToString() + " Hours " + Mathf.Floor(timeWarm % 60).ToString() + " Mins";
 
