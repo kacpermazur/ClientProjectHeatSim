@@ -28,13 +28,13 @@ class InteractHolder extends Component {
   };
 
   handleWallChange = value => {
-    const types = ["oldWall", "newWall"];
+    const types = ["oldWall", "newWallUN", "newWallIN"];
 
     this.setState({
       WallType: value
     });
 
-    console.log("Time: ", types[value]);
+    console.log("WallType: ", types[value]);
   };
 
   render() {
@@ -59,7 +59,7 @@ class InteractHolder extends Component {
           <Slider
             Slider
             min={0}
-            max={1}
+            max={2}
             step={1}
             value={WallType}
             onChange={this.handleWallChange}
