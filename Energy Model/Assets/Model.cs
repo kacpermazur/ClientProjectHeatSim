@@ -366,7 +366,7 @@ public class Model : MonoBehaviour
             currentTime++;
         }
 
-        settingsMenu.SetActive(true);
+        //settingsMenu.SetActive(false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", false);
         //settingsMenu.GetComponent<Animator>().SetBool("DropIn", true);
         Camera.main.GetComponent<Animator>().SetBool("CamDown", true);
