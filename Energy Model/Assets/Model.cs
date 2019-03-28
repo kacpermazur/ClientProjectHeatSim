@@ -45,7 +45,9 @@ public class Model : MonoBehaviour
     public Toggle pauseToggle;
 
     public Text warmText;
-    public Text boilerText;    
+    public Text boilerText;
+
+    public GameObject settingsMenu;
    
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,7 @@ public class Model : MonoBehaviour
         UpdateSliderText();
         startButton.interactable = true;
         paused = false;
+        settingsMenu.SetActive(true);
     }
 
     // Update is called once per frame
@@ -117,6 +120,11 @@ public class Model : MonoBehaviour
         {
             heatingPeriod2[i] = 34 + i;
         }
+
+        //settingsMenu.SetActive(false);
+        settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
+        settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
+        Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
 
         //Update displayed values
         UpdateDisplay();
@@ -345,6 +353,7 @@ public class Model : MonoBehaviour
 
     IEnumerator SimulateDay() //Simulates a whole day continously
     {
+        yield return new WaitForSecondsRealtime(1f); //Wait for a second (for animation purposes)
         for (int i = 0; i <= 48; i++) //48 half hour chunks
         {
             for (int j = 0; j < 30; j++) //30 mins per half hour
@@ -357,6 +366,11 @@ public class Model : MonoBehaviour
             currentTime++;
         }
 
+        settingsMenu.SetActive(true);
+        settingsMenu.GetComponent<Animator>().SetBool("DropDown", false);
+        //settingsMenu.GetComponent<Animator>().SetBool("DropIn", true);
+        Camera.main.GetComponent<Animator>().SetBool("CamDown", true);
+        
         startButton.interactable = true; //Sets button to be usable when the simulation is over
     }
 
