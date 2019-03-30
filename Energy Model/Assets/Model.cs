@@ -44,8 +44,7 @@ public class Model : MonoBehaviour
     public Slider timeSlider;
     public Toggle pauseToggle;
 
-    public Text warmText;
-    public Text boilerText;
+    public GameObject statScreen;
 
     public GameObject settingsMenu;
    
@@ -366,6 +365,8 @@ public class Model : MonoBehaviour
             currentTime++;
         }
 
+        statScreen.GetComponent<StatsScreen>().OutputStats(timeWarm, timeHeatingOn);
+
         //settingsMenu.SetActive(false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", false);
         //settingsMenu.GetComponent<Animator>().SetBool("DropIn", true);
@@ -403,16 +404,9 @@ public class Model : MonoBehaviour
 
         
 
-        warmText.text = Mathf.Floor(timeWarm / 60).ToString() + " Hours " + Mathf.Floor(timeWarm % 60).ToString() + " Mins";
+        
 
-        if (boilerTimeLeft > 0)
-        {
-            boilerText.text = "True";
-        }
-        else
-        {
-            boilerText.text = "False";
-        }
+        
     }
 
     public void UpdateSliderText() //Updates text value above temperature slider
