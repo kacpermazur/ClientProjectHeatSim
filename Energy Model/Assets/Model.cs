@@ -262,7 +262,11 @@ public class Model : MonoBehaviour
             //Air heats up
             airTemp += 4.0f / 30.0f;
 
-            timeHeatingOn++;
+            if (heatingOn)
+            {
+                timeHeatingOn++;
+            }
+            
 
         }
         else //If the heating is off
