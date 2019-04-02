@@ -1,0 +1,45 @@
+.InteractContainer {
+  position: relative;
+  width: 70%;
+  height: 200px;
+  background: rgba(0, 0, 0, 0.11);
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.45);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.45);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.45);
+}
+
+.SliderHolder {
+  top: 100px;
+}
+
+.rangeslider-horizontal {
+  display: inline-block;
+  width: 30%;
+  text-align: center;
+  margin-top: 3rem;
+  margin-left: 0.5rem;
+}
+
+.StartButton {
+  background-color: #44c767;
+  -moz-border-radius: 28px;
+  -webkit-border-radius: 28px;
+  border-radius: 28px;
+  border: 1px solid #18ab29;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
+  margin-top: 2rem;
+}
+.StartButton:hover {
+  background-color: #5cbf2a;
+}
+.StartButton:active {
+  position: relative;
+  top: 1px;
+}
