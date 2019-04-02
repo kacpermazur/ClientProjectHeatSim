@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Model : MonoBehaviour
 {
+    //Model Variables
     bool heatingOn; //If thermo is currently on
     int currentTime; //Current time, in half hours starting at midnight (0 is 0:00, 1 is 0:30, 6am is 12, 5pm is 34 etc)
     float wallTemp; //Wall Temperature
@@ -13,8 +14,13 @@ public class Model : MonoBehaviour
     int[] heatingPeriod1; //Set of times the thermostat can be on
     int[] heatingPeriod2; //Second set of times the thermostat can be on
     bool paused;
+    int timeWarm; //Number of minutes house is 'warm' for
+    int timeHeatingOn; //Total time the heating is on for
 
-    //Variables
+    bool boilerOn; //If the boiler is giving off heat after turning off
+    int boilerTimeLeft; //Time before the boiler stops giving off heat
+
+    //User Variables
     int wallType;
     int heatTime;
     float targetTemp;
@@ -37,6 +43,10 @@ public class Model : MonoBehaviour
     public Button startButton;
     public Slider timeSlider;
     public Toggle pauseToggle;
+
+    public GameObject statScreen;
+
+    public GameObject settingsMenu;
    
     // Start is called before the first frame update
     void Start()
@@ -44,7 +54,7 @@ public class Model : MonoBehaviour
         UpdateSliderText();
         startButton.interactable = true;
         paused = false;
-        pauseToggle.isOn = paused;
+        settingsMenu.SetActive(true);
     }
 
     // Update is called once per frame
@@ -55,7 +65,7 @@ public class Model : MonoBehaviour
 
     
 
-    public void RunSim()
+    public void RunSim() //Sets up values for start of simulation
     {
         //Read variables
         wallType = wallList.value;
@@ -94,7 +104,9 @@ public class Model : MonoBehaviour
         wallTemp = 14;
         currentTime = 12; //Set time to 6:00am
         heatingOn = true;
-        
+        timeWarm = 0;
+        timeHeatingOn = 0;
+
         //Get the time period the heating is on for
         heatingPeriod1 = new int[heatTime];
         heatingPeriod2 = new int[heatTime];
@@ -108,11 +120,16 @@ public class Model : MonoBehaviour
             heatingPeriod2[i] = 34 + i;
         }
 
+        //settingsMenu.SetActive(false);
+        settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
+        settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
+        Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
+
         //Update displayed values
         UpdateDisplay();
     }
 
-    //Method to advance the current time by half an hour
+    //Method to advance the current time by half an hour (Old method not in use)
     public void AdvanceTime()
     {
         currentTime += 1; //Advance time by half an hour
@@ -196,7 +213,7 @@ public class Model : MonoBehaviour
         //Turns heating on/off at end of time step
         for (int i = 0; i < heatTime; i++)
         {
-            if (heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime)
+            if ((heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime) && airTemp < targetTemp - 1)
             {
                 heatingOn = true; //Turns heating on if within set heating periods
             }
@@ -213,7 +230,7 @@ public class Model : MonoBehaviour
     {
                
 
-        if (heatingOn) //If the heating is currently on
+        if (heatingOn || boilerTimeLeft > 0) //If the heating is currently on, or the boiler is still giving off heat
         {
 
 
@@ -243,7 +260,13 @@ public class Model : MonoBehaviour
             }
 
             //Air heats up
-            airTemp += 4.0f / 30.0f;            
+            airTemp += 4.0f / 30.0f;
+
+            if (heatingOn)
+            {
+                timeHeatingOn++;
+            }
+            
 
         }
         else //If the heating is off
@@ -278,24 +301,46 @@ public class Model : MonoBehaviour
             }
         }
 
-
+        boilerTimeLeft--; //Reduce the time left for the boiler. Reducing this below 0 is fine as it will be reset when it needs to be turned back on
 
         //Turns heating on/off at end of time step
         for (int i = 0; i < heatTime; i++)
         {
-            if (heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime)
+            if ((heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime) && airTemp < targetTemp - 1)
             {
                 heatingOn = true; //Turns heating on if within set heating periods
+
+                if (airTemp >= targetTemp && boilerOn == false) //If within heating period and boiler would turn off, turn boiler on
+                {
+                    boilerOn = true;
+                    boilerTimeLeft = 30; //boiler on for half an hour
+                }
+                else //If temp is lower than required amount
+                {
+                    boilerOn = false; //Allows the boiler to be turned on again - used so boiler is not always on while within heating time
+                }
             }
         }
         if (airTemp >= targetTemp)
         {
             heatingOn = false; //Overrides heating setting if current air temperature is above limit
+
+            if (boilerOn == false)
+            {
+                boilerOn = true;
+                boilerTimeLeft = 30; //boiler on for half an hour
+            }
+
+        }
+
+        if (airTemp >= 18 && wallTemp >= 17)
+        {
+            timeWarm++;
         }
         UpdateDisplay();
     }
 
-    public void TestAltMethod()
+    public void TestAltMethod() //Sets up and runs simulation
     {
         startButton.interactable = false;
 
@@ -311,6 +356,7 @@ public class Model : MonoBehaviour
 
     IEnumerator SimulateDay() //Simulates a whole day continously
     {
+        yield return new WaitForSecondsRealtime(1f); //Wait for a second (for animation purposes)
         for (int i = 0; i <= 48; i++) //48 half hour chunks
         {
             for (int j = 0; j < 30; j++) //30 mins per half hour
@@ -323,6 +369,13 @@ public class Model : MonoBehaviour
             currentTime++;
         }
 
+        statScreen.GetComponent<StatsScreen>().OutputStats(timeWarm, timeHeatingOn);
+
+        //settingsMenu.SetActive(false);
+        settingsMenu.GetComponent<Animator>().SetBool("DropDown", false);
+        //settingsMenu.GetComponent<Animator>().SetBool("DropIn", true);
+        Camera.main.GetComponent<Animator>().SetBool("CamDown", true);
+        
         startButton.interactable = true; //Sets button to be usable when the simulation is over
     }
 
@@ -342,7 +395,7 @@ public class Model : MonoBehaviour
         }
         
 
-        //Sets Colours
+        //Sets colours of air/wall images
         float airRed = Mathf.Floor(((airTemp - 14) / (targetTemp - 14)) * 250); //Generates red value based on percentage of current temperature and target temperature
         float airBlue = 255 - airRed; //Blue value is the inverse of red value
         Color airCol = new Color(airRed / 255f, 0, airBlue / 255f);
@@ -352,9 +405,15 @@ public class Model : MonoBehaviour
         float wallBlue = 255 - wallRed;
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
+
+        
+
+        
+
+        
     }
 
-    public void UpdateSliderText()
+    public void UpdateSliderText() //Updates text value above temperature slider
     {
         tempSettingText.text = tempSlider.value.ToString();
     }
