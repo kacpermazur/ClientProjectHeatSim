@@ -387,18 +387,19 @@ public class Model : MonoBehaviour
         timeText.text = currentTime.ToString();
         if (currentTime >= 48) //Wraps time around 24 hour clock
         {
-            timeText.text = (Mathf.FloorToInt((currentTime - 48) / 2)).ToString() + ":" + (Mathf.FloorToInt(currentTime % 2) * 30).ToString();
+            timeText.text = (Mathf.FloorToInt((currentTime - 48) / 2)).ToString() + ":" + (Mathf.FloorToInt(currentTime % 2) * 30).ToString("00");
         }
         else
         {
-            timeText.text = (Mathf.FloorToInt(currentTime / 2)).ToString() + ":" + (Mathf.FloorToInt(currentTime % 2) * 30).ToString();
+            timeText.text = (Mathf.FloorToInt(currentTime / 2)).ToString() + ":" + (Mathf.FloorToInt(currentTime % 2) * 30).ToString("00");
         }
-        
+
 
         //Sets colours of air/wall images
+        float tempAlpha = airImage.color.a;
         float airRed = Mathf.Floor(((airTemp - 14) / (targetTemp - 14)) * 250); //Generates red value based on percentage of current temperature and target temperature
         float airBlue = 255 - airRed; //Blue value is the inverse of red value
-        Color airCol = new Color(airRed / 255f, 0, airBlue / 255f);
+        Color airCol = new Color(airRed / 255f, 0, airBlue / 255f, tempAlpha);
         airImage.color = airCol;
 
         float wallRed = Mathf.Floor(((wallTemp - 14) / (targetTemp - 14)) * 250);
