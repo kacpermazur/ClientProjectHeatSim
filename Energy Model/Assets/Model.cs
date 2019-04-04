@@ -123,7 +123,7 @@ public class Model : MonoBehaviour
         //settingsMenu.SetActive(false);
         settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
-        Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
+        Camera.main.GetComponent<Animator>().SetBool("CamUp", false);
 
         //Update displayed values
         UpdateDisplay();
