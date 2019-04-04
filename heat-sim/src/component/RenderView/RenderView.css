@@ -1,0 +1,9 @@
+.render-frame {
+  position: relative;
+  background: rgba(185, 86, 86, 0.61);
+  width: 70%;
+  height: 35rem;
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.45);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.45);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.45);
+}
