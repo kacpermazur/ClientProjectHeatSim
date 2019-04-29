@@ -40,11 +40,8 @@ public class Model : MonoBehaviour
     public Image airImage;
     public Image wallImage;
 
-<<<<<<< HEAD
     public Image windowImage;
 
-=======
->>>>>>> kieran
     public Button startButton;
     public Slider timeSlider;
     public Toggle pauseToggle;
@@ -52,7 +49,7 @@ public class Model : MonoBehaviour
     public GameObject statScreen;
 
     public GameObject settingsMenu;
-   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -65,10 +62,10 @@ public class Model : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    
+
 
     public void RunSim() //Sets up values for start of simulation
     {
@@ -112,13 +109,10 @@ public class Model : MonoBehaviour
         timeWarm = 0;
         timeHeatingOn = 0;
 
-<<<<<<< HEAD
         //Make sky colour dark
         Color darkCol = new Color(0, 0, 0);
         windowImage.color = darkCol;
 
-=======
->>>>>>> kieran
         //Get the time period the heating is on for
         heatingPeriod1 = new int[heatTime];
         heatingPeriod2 = new int[heatTime];
@@ -135,11 +129,8 @@ public class Model : MonoBehaviour
         //settingsMenu.SetActive(false);
         settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
-<<<<<<< HEAD
         Camera.main.GetComponent<Animator>().SetBool("CamUp", false);
-=======
         Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
->>>>>>> kieran
 
         //Update displayed values
         UpdateDisplay();
@@ -153,10 +144,10 @@ public class Model : MonoBehaviour
         {
             currentTime = 0;
         }
-        
+
         if (heatingOn) //If the heating is currently on
         {
-            
+
 
             //Calc difference in temperature between air and wall
             airWallDifference = (airTemp - wallTemp);
@@ -244,7 +235,7 @@ public class Model : MonoBehaviour
     //Testing method to advance time smoothly
     public void AdvanceTimeAlternative()
     {
-               
+
 
         if (heatingOn || boilerTimeLeft > 0) //If the heating is currently on, or the boiler is still giving off heat
         {
@@ -282,7 +273,7 @@ public class Model : MonoBehaviour
             {
                 timeHeatingOn++;
             }
-            
+
 
         }
         else //If the heating is off
@@ -363,7 +354,7 @@ public class Model : MonoBehaviour
         RunSim(); //Resets values to start    
 
         StartCoroutine(SimulateDay()); //Runs Simulation over a day
-        
+
         //if (currentTime == 48) //At midnight loop time
         //{
         //    currentTime = 0;
@@ -377,7 +368,7 @@ public class Model : MonoBehaviour
         {
             for (int j = 0; j < 30; j++) //30 mins per half hour
             {
-                
+
                 AdvanceTimeAlternative(); //Simulates a minute
                 yield return new WaitForSecondsRealtime(0.01f * timeSlider.value); //Waits a little before simulating the next minute, so UI can display progress
 
@@ -391,7 +382,7 @@ public class Model : MonoBehaviour
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", false);
         //settingsMenu.GetComponent<Animator>().SetBool("DropIn", true);
         Camera.main.GetComponent<Animator>().SetBool("CamDown", true);
-        
+
         startButton.interactable = true; //Sets button to be usable when the simulation is over
     }
 
@@ -423,8 +414,6 @@ public class Model : MonoBehaviour
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
 
-<<<<<<< HEAD
-        //Change Window Colour
         if (currentTime > 36)
         {
             Color tempCol = new Color(0, 0, 0);
@@ -432,28 +421,19 @@ public class Model : MonoBehaviour
         }
         else if (currentTime > 14)
         {
-            Color tempCol = new Color(1,1,1);
+            Color tempCol = new Color(1, 1, 1);
             windowImage.color = Color.Lerp(windowImage.color, tempCol, Time.deltaTime);
         }
-=======
-        
-
->>>>>>> kieran
-        
-
-        
     }
+        public void UpdateSliderText() //Updates text value above temperature slider
+        {
+            tempSettingText.text = tempSlider.value.ToString();
+        }
 
-    public void UpdateSliderText() //Updates text value above temperature slider
-    {
-        tempSettingText.text = tempSlider.value.ToString();
-    }
+        public void Pause()
+        {
+            paused = pauseToggle.isOn;
+        }
 
-    public void Pause()
-    {
-        paused = pauseToggle.isOn;
-    }
-
-    
 
 }
