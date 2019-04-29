@@ -40,6 +40,8 @@ public class Model : MonoBehaviour
     public Image airImage;
     public Image wallImage;
 
+    public Image windowImage;
+
     public Button startButton;
     public Slider timeSlider;
     public Toggle pauseToggle;
@@ -107,6 +109,10 @@ public class Model : MonoBehaviour
         timeWarm = 0;
         timeHeatingOn = 0;
 
+        //Make sky colour dark
+        Color darkCol = new Color(0, 0, 0);
+        windowImage.color = darkCol;
+
         //Get the time period the heating is on for
         heatingPeriod1 = new int[heatTime];
         heatingPeriod2 = new int[heatTime];
@@ -123,7 +129,7 @@ public class Model : MonoBehaviour
         //settingsMenu.SetActive(false);
         settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
-        Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
+        Camera.main.GetComponent<Animator>().SetBool("CamUp", false);
 
         //Update displayed values
         UpdateDisplay();
@@ -407,8 +413,17 @@ public class Model : MonoBehaviour
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
 
-        
-
+        //Change Window Colour
+        if (currentTime > 36)
+        {
+            Color tempCol = new Color(0, 0, 0);
+            windowImage.color = Color.Lerp(windowImage.color, tempCol, Time.deltaTime);
+        }
+        else if (currentTime > 14)
+        {
+            Color tempCol = new Color(1,1,1);
+            windowImage.color = Color.Lerp(windowImage.color, tempCol, Time.deltaTime);
+        }
         
 
         
