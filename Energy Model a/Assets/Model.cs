@@ -387,8 +387,8 @@ public class Model : MonoBehaviour
 
     public void UpdateDisplay() //Updates UI elements
     {
-        airTempText.text = airTemp.ToString("F1");
-        wallTempText.text = wallTemp.ToString("F1");
+        airTempText.text = airTemp.ToString("F0");
+        wallTempText.text = wallTemp.ToString("F0");
         thermoStatus.text = heatingOn.ToString();
         timeText.text = currentTime.ToString();
         if (currentTime >= 48) //Wraps time around 24 hour clock
