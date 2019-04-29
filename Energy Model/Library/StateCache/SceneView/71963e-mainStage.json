@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":true,"pivot":{"x":-0.725138783454895,"y":-0.3554370105266571,"z":-0.056640625},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"size":14.446845054626465,"orthographic":true}
+=======
+﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":true,"pivot":{"x":0.3594236671924591,"y":-9.600363731384278,"z":-0.0625},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"size":15.268390655517579,"orthographic":true}
+>>>>>>> kieran

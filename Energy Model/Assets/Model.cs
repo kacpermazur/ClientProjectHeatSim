@@ -40,8 +40,11 @@ public class Model : MonoBehaviour
     public Image airImage;
     public Image wallImage;
 
+<<<<<<< HEAD
     public Image windowImage;
 
+=======
+>>>>>>> kieran
     public Button startButton;
     public Slider timeSlider;
     public Toggle pauseToggle;
@@ -109,10 +112,13 @@ public class Model : MonoBehaviour
         timeWarm = 0;
         timeHeatingOn = 0;
 
+<<<<<<< HEAD
         //Make sky colour dark
         Color darkCol = new Color(0, 0, 0);
         windowImage.color = darkCol;
 
+=======
+>>>>>>> kieran
         //Get the time period the heating is on for
         heatingPeriod1 = new int[heatTime];
         heatingPeriod2 = new int[heatTime];
@@ -129,7 +135,11 @@ public class Model : MonoBehaviour
         //settingsMenu.SetActive(false);
         settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
+<<<<<<< HEAD
         Camera.main.GetComponent<Animator>().SetBool("CamUp", false);
+=======
+        Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
+>>>>>>> kieran
 
         //Update displayed values
         UpdateDisplay();
@@ -413,6 +423,7 @@ public class Model : MonoBehaviour
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
 
+<<<<<<< HEAD
         //Change Window Colour
         if (currentTime > 36)
         {
@@ -424,6 +435,10 @@ public class Model : MonoBehaviour
             Color tempCol = new Color(1,1,1);
             windowImage.color = Color.Lerp(windowImage.color, tempCol, Time.deltaTime);
         }
+=======
+        
+
+>>>>>>> kieran
         
 
         
