@@ -50,6 +50,8 @@ public class Model : MonoBehaviour
 
     public GameObject settingsMenu;
 
+    public ParticleSystemRenderer radiatorHeat;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +59,7 @@ public class Model : MonoBehaviour
         startButton.interactable = true;
         paused = false;
         settingsMenu.SetActive(true);
+        
     }
 
     // Update is called once per frame
@@ -130,7 +133,6 @@ public class Model : MonoBehaviour
         settingsMenu.GetComponent<Animator>().SetBool("DropIn", false);
         settingsMenu.GetComponent<Animator>().SetBool("DropDown", true);
         Camera.main.GetComponent<Animator>().SetBool("CamUp", false);
-        Camera.main.GetComponent<Animator>().SetBool("CamDown", false);
 
         //Update displayed values
         UpdateDisplay();
@@ -240,7 +242,7 @@ public class Model : MonoBehaviour
         if (heatingOn || boilerTimeLeft > 0) //If the heating is currently on, or the boiler is still giving off heat
         {
 
-
+            radiatorHeat.sortingOrder = 20;
             //Calc difference in temperature between air and wall
             airWallDifference = (airTemp - wallTemp);
 
@@ -278,6 +280,7 @@ public class Model : MonoBehaviour
         }
         else //If the heating is off
         {
+            radiatorHeat.sortingOrder = -20;
             switch (wallType) //Heating depends on type of wall
             {
                 case 0: //Quick
@@ -316,15 +319,17 @@ public class Model : MonoBehaviour
             if ((heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime) && airTemp < targetTemp - 1)
             {
                 heatingOn = true; //Turns heating on if within set heating periods
+                
 
                 if (airTemp >= targetTemp && boilerOn == false) //If within heating period and boiler would turn off, turn boiler on
                 {
                     boilerOn = true;
                     boilerTimeLeft = 30; //boiler on for half an hour
+
                 }
                 else //If temp is lower than required amount
                 {
-                    boilerOn = false; //Allows the boiler to be turned on again - used so boiler is not always on while within heating time
+                    boilerOn = false; //Allows the boiler to be turned on again - used so boiler is not always on while within heating time                    
                 }
             }
         }
@@ -388,8 +393,8 @@ public class Model : MonoBehaviour
 
     public void UpdateDisplay() //Updates UI elements
     {
-        airTempText.text = airTemp.ToString("F1");
-        wallTempText.text = wallTemp.ToString("F1");
+        airTempText.text = airTemp.ToString("F0");
+        wallTempText.text = wallTemp.ToString("F0");
         thermoStatus.text = heatingOn.ToString();
         timeText.text = currentTime.ToString();
         if (currentTime >= 48) //Wraps time around 24 hour clock
@@ -414,6 +419,7 @@ public class Model : MonoBehaviour
         Color wallCol = new Color(wallRed / 255f, 0, wallBlue / 255f);
         wallImage.color = wallCol;
 
+        //Change Window Colour
         if (currentTime > 36)
         {
             Color tempCol = new Color(0, 0, 0);
@@ -424,6 +430,18 @@ public class Model : MonoBehaviour
             Color tempCol = new Color(1, 1, 1);
             windowImage.color = Color.Lerp(windowImage.color, tempCol, Time.deltaTime);
         }
+
+        //Show radiator particles
+        //if (heatingOn || boilerTimeLeft >= 0)
+        //{
+        //    radiatorHeat.SetActive(true);
+        //}
+        //else
+        //{
+        //    radiatorHeat.SetActive(false);
+        //}
+
+        
     }
         public void UpdateSliderText() //Updates text value above temperature slider
         {

@@ -45,4 +45,9 @@ public class StatsScreen : MonoBehaviour
         warmText.text = Mathf.Floor(timeWarm / 60).ToString() + " Hours " + Mathf.Floor(timeWarm % 60).ToString() + " Mins";
         boilerText.text = Mathf.Floor(timeHeatingOn / 60).ToString() + " Hours " + Mathf.Floor(timeHeatingOn % 60).ToString() + " Mins";
     }
+
+    public void OpenWebsite()
+    {
+        Application.OpenURL("https://www.plymouthenergycommunity.com/");
+    }
 }
