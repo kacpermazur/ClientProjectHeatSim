@@ -49,6 +49,8 @@ public class Model : MonoBehaviour
     public GameObject statScreen;
 
     public GameObject settingsMenu;
+
+    public ParticleSystemRenderer radiatorHeat;
    
     // Start is called before the first frame update
     void Start()
@@ -57,6 +59,7 @@ public class Model : MonoBehaviour
         startButton.interactable = true;
         paused = false;
         settingsMenu.SetActive(true);
+        
     }
 
     // Update is called once per frame
@@ -239,7 +242,7 @@ public class Model : MonoBehaviour
         if (heatingOn || boilerTimeLeft > 0) //If the heating is currently on, or the boiler is still giving off heat
         {
 
-
+            radiatorHeat.sortingOrder = 20;
             //Calc difference in temperature between air and wall
             airWallDifference = (airTemp - wallTemp);
 
@@ -277,6 +280,7 @@ public class Model : MonoBehaviour
         }
         else //If the heating is off
         {
+            radiatorHeat.sortingOrder = -20;
             switch (wallType) //Heating depends on type of wall
             {
                 case 0: //Quick
@@ -315,15 +319,17 @@ public class Model : MonoBehaviour
             if ((heatingPeriod1[i] == currentTime || heatingPeriod2[i] == currentTime) && airTemp < targetTemp - 1)
             {
                 heatingOn = true; //Turns heating on if within set heating periods
+                
 
                 if (airTemp >= targetTemp && boilerOn == false) //If within heating period and boiler would turn off, turn boiler on
                 {
                     boilerOn = true;
                     boilerTimeLeft = 30; //boiler on for half an hour
+
                 }
                 else //If temp is lower than required amount
                 {
-                    boilerOn = false; //Allows the boiler to be turned on again - used so boiler is not always on while within heating time
+                    boilerOn = false; //Allows the boiler to be turned on again - used so boiler is not always on while within heating time                    
                 }
             }
         }
@@ -424,7 +430,16 @@ public class Model : MonoBehaviour
             Color tempCol = new Color(1,1,1);
             windowImage.color = Color.Lerp(windowImage.color, tempCol, Time.deltaTime);
         }
-        
+
+        //Show radiator particles
+        //if (heatingOn || boilerTimeLeft >= 0)
+        //{
+        //    radiatorHeat.SetActive(true);
+        //}
+        //else
+        //{
+        //    radiatorHeat.SetActive(false);
+        //}
 
         
     }
